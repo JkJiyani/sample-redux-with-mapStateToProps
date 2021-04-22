@@ -1,4 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addPost } from '../redux/actions'
+import { v4 as uuidv4 } from 'uuid'
 
 class NewPostForm extends React.Component {
     constructor() {
@@ -14,7 +17,8 @@ class NewPostForm extends React.Component {
 
     handleOnSubmit = event => {
         event.preventDefault()
-        console.log(this.state.text)
+        this.props.addPost({ text: this.state.text, id: uuidv4() })
+        this.setState({ text: "" })
     }
 
     render() {
@@ -35,4 +39,10 @@ class NewPostForm extends React.Component {
     }
 }
 
-export default NewPostForm
+const mapDispatchToProps = dispatch => {
+    return {
+        addPost: post => dispatch(addPost(post))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(NewPostForm)
